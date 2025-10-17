@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Metadata and CSS styles -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9">
+  <title>Score Sheet</title>
+  <link rel="icon" href="./CTFDA - logo.png" type="image/png"> 
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="/images/CTFDA - logo.png" as="image">
+</head>
+
+<body>
+  <div class="form-container">
+
+    <div class="site-header ctfda">
+      <img src="CTFDA - logo.png" alt="Cape Town Flying Disc Association" class="header-image">
+      <h2 class="site-header-title">CTFDA League</h2>
+    </div>
+    <form id="scoreForm">
+      <input type="hidden" id="time" name="time">
+
+      <div class="setup-controls">
+        <button type="button" class="main-button taller-button" id="openSetupBtn">Match Setup</button>
+      </div>
+
+      <div class="teams-display" id="teamsDisplay">A vs B</div>
+
+      <!-- site-header-->
+      <table class="timer-table">
+        <tr>
+          <td class="timer-left" id="timerColumn">
+            <div id="timerDisplay" class="timer-display">100:00</div>
+
+            <label for="countdownTime" class="timer-label">Set Time (min):</label>
+            <input type="number" id="countdownTime" value="100" min="1" max="300" class="timer-input">
+          </td>
+          
+          <td class="timer-right">
+            <button type="button" class="main-button taller-button PausePlay-button" id="playPauseBtn">Play</button>
+          </td>
+        </tr>
+        <!-- Seconds Timer Row -->
+        <tr>
+          <td class="timer-left" id="timerColumnSec">
+            <div id="timerDisplaySec" class="timer-display">01:15</div>
+
+            <label for="countdownTimeSec" class="timer-label">Set Time (sec):</label>
+            <input type="number" id="countdownTimeSec" value="75" min="1" max="3600" class="timer-input">
+          </td>
+          
+          <td class="timer-right">
+            <div class="timer-subtext">Reset (hold 5s)</div>
+            <button type="button" class="main-button taller-button PausePlay-button" id="playPauseSecBtn">Play</button>
+          </td>
+        </tr>
+      </table>
+
+      <div class="time-additions-trigger">
+        <button type="button" class="main-button taller-button" id="openTimePopupBtn" disabled>Additional time options</button>
+      </div>
+      <!-- Add Score Buttons -->
+      <div class="add-score-button">
+        <button type="button" class="main-button taller-button" id="startMatchBtn">
+          Start Match
+        </button>
+        <button type="button" class="main-button taller-button add-score hidden" id="addScoreTeamA">
+          + Add Score for Team A </button>
+        <button type="button" class="main-button taller-button add-score hidden" id="addScoreTeamB">
+          + Add Score for Team B </button>
+      </div>
+
+      <!-- Scoring Table -->
+      <table id="scoringTable">
+        <tr>
+          <th class="abba-col"><span class="abba-label">ABBA</span><span id="abbaDisplay" class="abba-value">-</span></th>
+          <th class="score-col">Score A</th>
+          <th class="assist-col">Assist A</th>
+          <th class="total-col">Total</th>
+          <th class="score-col">Score B</th>
+          <th class="assist-col">Assist B</th>
+          <th>Edit</th>
+        </tr>
+        <tbody id="scoringTableBody"></tbody>
+      </table>
+
+      <!-- Team List Section -->
+      <div class="team-list-container">
+        <div>
+          <h3>Team A Players</h3>
+          <textarea id="teamAList" readonly></textarea>
+        </div>
+        <div>
+          <h3>Team B Players</h3>
+          <textarea id="teamBList" readonly></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Section with Loading Animation -->
+      <div class="submit-section">
+        <input type="button" value="Submit" id="submitBtn">
+        <div id="loadingAnimation" style="display: none;">
+          Loading <span id="dots"></span>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Success Message -->
+  <div id="successMessage" style="display: none;">
+    Data has been successfully exported to Google Sheets!
+  </div>
+
+  <!-- Container to display logged data after submission -->
+  <div id="loggedDataContainer" style="display: none;">
+    <h3>Logged Data</h3>
+    <table id="loggedDataTable">
+      <thead>
+        <tr>
+          <th>GameID</th>
+          <th>Time</th>
+          <th>Team</th>
+          <th>Score</th>
+          <th>Assist</th>
+        </tr>
+      </thead>
+      <tbody id="loggedDataBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Popup for Adding/Editing Score -->
+  <div class="overlay" id="overlay" style="display: none;"></div>
+  <div class="popup" id="scorePopup" style="display: none;">
+    <button
+      type="button"
+      id="closePopupBtn"
+      style="float: right; background: none; border: none; font-size: 40px; cursor: pointer;">
+      &times;
+    </button>
+
+    <h3 id="popupTitle">Add new point</h3>
+
+    <!-- Scorer heading -->
+    <label for="scorer" style="font-weight: bold;">Scorer:</label>
+    <select id="scorer" required>
+      <option value="">Select Scorer</option>
+    </select>
+
+    <!-- Assist heading -->
+    <label for="assist" style="font-weight: bold;">Assist:</label>
+    <select id="assist" required>
+      <option value="">Select Assist</option>
+    </select>
+
+    <input type="button" id="popupButton" value="Add Score">
+    <input type="button" id="deleteBtn" value="Delete" style="display:none; margin-left: 8px; background-color: #c0392b; color: #fff;">
+  </div>
+
+  <!-- Timeout edit popup -->
+  <div class="overlay" id="timeoutEditOverlay" style="display: none;"></div>
+  <div class="popup" id="timeoutEditPopup" style="display: none;">
+    <button
+      type="button"
+      id="closeTimeoutEditPopupBtn"
+      style="float: right; background: none; border: none; font-size: 32px; cursor: pointer;">
+      &times;
+    </button>
+    <h3>Edit Timeout</h3>
+    <div class="popup-field">
+      <label for="timeoutEditTeam">Timeout called by</label>
+      <select id="timeoutEditTeam">
+        <option value="">Select team</option>
+        <option value="A">Team A</option>
+        <option value="B">Team B</option>
+      </select>
+    </div>
+    <div class="popup-actions">
+      <button type="button" class="main-button taller-button" id="saveTimeoutEditBtn">Save</button>
+    </div>
+  </div>
+
+  <!-- Halftime edit popup -->
+  <div class="overlay" id="halftimeEditOverlay" style="display: none;"></div>
+  <div class="popup" id="halftimeEditPopup" style="display: none;">
+    <button
+      type="button"
+      id="closeHalftimeEditPopupBtn"
+      style="float: right; background: none; border: none; font-size: 32px; cursor: pointer;">
+      &times;
+    </button>
+    <h3>Edit Halftime Entry</h3>
+    <p style="margin-bottom: 16px;">Use the delete option below to remove this halftime log.</p>
+    <div class="popup-actions">
+      <button
+        type="button"
+        class="main-button taller-button"
+        id="deleteHalftimeBtn"
+        style="background-color: #c0392b; color: #fff;">
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <!-- Time additions popup -->
+  <div class="overlay" id="timeOverlay" style="display: none;"></div>
+  <div class="popup" id="timePopup" style="display: none;">
+    <button
+      type="button"
+      id="closeTimePopupBtn"
+      style="float: right; background: none; border: none; font-size: 32px; cursor: pointer;">
+      &times;
+    </button>
+    <h3>Time additions</h3>
+    <div class="timeout-controls">
+      <div class="timeout-half">
+        <button type="button" class="main-button taller-button halftime-button" id="halfTimeBtn">Half Time</button>
+      </div>
+      <div class="timeout-row">
+        <div class="timeout-team">
+          <div class="timeout-team-label" id="timeoutTeamLabelA">Team A</div>
+          <button type="button" class="main-button taller-button timeout-button" id="timeoutTeamA">Timeout A</button>
+          <div class="timeout-remaining">
+            <span>Remaining (total): <strong id="timeoutARemainingTotal">2</strong></span>
+            <span>Remaining (half): <strong id="timeoutARemainingHalf">N/A</strong></span>
+          </div>
+        </div>
+        <div class="timeout-team">
+          <div class="timeout-team-label" id="timeoutTeamLabelB">Team B</div>
+          <button type="button" class="main-button taller-button timeout-button" id="timeoutTeamB">Timeout B</button>
+          <div class="timeout-remaining">
+            <span>Remaining (total): <strong id="timeoutBRemainingTotal">2</strong></span>
+            <span>Remaining (half): <strong id="timeoutBRemainingHalf">N/A</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="stoppage-control">
+        <button type="button" class="main-button taller-button stoppage-button" id="stoppageToggleBtn">GAME STOPPAGE</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Initial loading popup -->
+  <div class="overlay" id="loadingOverlay" style="display: none;"></div>
+  <div class="popup" id="loadingPopup" style="display: none;">
+    <h3>Loading data</h3>
+    <p>Please wait while we load the latest team information.</p>
+  </div>
+  
+  <!-- Setup popup -->
+  <div class="overlay" id="setupOverlay" style="display: none;"></div>
+  <div class="popup" id="setupPopup" style="display: none;">
+    <button
+      type="button"
+      id="closeSetupPopupBtn"
+      style="float: right; background: none; border: none; font-size: 32px; cursor: pointer;">
+      &times;
+    </button>
+    <h3>Game Setup</h3>
+    <div class="popup-field">
+      <label for="teamA">Team A</label>
+      <select id="teamA" required>
+        <option value="">Select Team A</option>
+      </select>
+    </div>
+    <div class="popup-field">
+      <label for="teamB">Team B</label>
+      <select id="teamB" required>
+        <option value="">Select Team B</option>
+      </select>
+    </div>
+    <div class="popup-field">
+      <label for="setupMatchDuration">Match duration</label>
+      <input type="number" id="setupMatchDuration" min="1" max="300" value="100">
+    </div>
+    <div class="popup-field">
+      <label for="setupHalftime">Halftime (min)</label>
+      <input type="number" id="setupHalftime" min="1" max="300" value="55">
+    </div>
+    <div class="popup-field">
+      <label for="setupHalftimeDuration">Halftime duration (min)</label>
+      <input type="number" id="setupHalftimeDuration" min="1" max="120" value="7">
+    </div>
+    <div class="popup-field">
+      <label for="setupTimeoutDuration">Timeout duration (sec)</label>
+      <input type="number" id="setupTimeoutDuration" min="1" max="3600" value="75">
+    </div>
+    <div class="popup-field">
+      <label for="setupTimeoutsTotal">Timeouts total</label>
+      <input type="number" id="setupTimeoutsTotal" min="0" max="10" value="3">
+    </div>
+    <div class="popup-field">
+      <label for="setupTimeoutsPerHalf">Timeouts per half</label>
+      <input type="number" id="setupTimeoutsPerHalf" min="0" max="10" value="0">
+    </div>
+    <div class="popup-field">
+      <label for="setupAbba">ABBA</label>
+      <select id="setupAbba">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+        <option value="NONE">None</option>
+      </select>
+    </div>
+    <div class="popup-actions">
+      <button type="button" class="main-button taller-button" id="saveSetupBtn">Save</button>
+    </div>
+  </div>
+  
+  <!-- Warn before unload -->
+  <script>
+    window.addEventListener('beforeunload', function (e) {
+      // Modern browsers require preventDefault and returnValue set
+      e.preventDefault();
+      e.returnValue = '';
+      // Some browsers also respect returned string
+      return '';
+    });
+  </script>
+  <script defer src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,1080 @@
+/* styles.css */
+
+/* Main colours */
+:root {
+  --color-bg-main: #eef2fb; /* soft blue-lavender background */
+  --color-bg-white: #ffffff;
+  --color-brand: #2f2a85; /* deep indigo/purple for text/buttons */
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-headings-bg: #e7e3f7; /* light lavender for table headers */
+  /* Palette inspired by CTFDA logo */
+  --ctfda-blue-1: #83c6ff;
+  --ctfda-blue-2: #4fa0e6;
+  --ctfda-blue-3: #0b3a79;
+  --ctfda-indigo: #2f2a85;
+  --ctfda-purple-1: #5f3fa3;
+  --ctfda-purple-2: #9d7fe6;
+}
+
+/* Stripping all margins/padding avoids cross‐browser inconsistencies */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main body formatting */
+body {
+  font-family: Montserrat, Helvetica;
+  color: var(--color-brand);
+  line-height: 1.2;
+  padding: 1rem; /* breathing room on all sides */
+  font-size: 20px;
+}
+
+
+/* ======================== */
+/*      Main Container      */
+/* ======================== */
+
+.form-container {
+  background-color: var(--color-bg-white);
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--color-shadow);
+  max-width: 700px;
+  margin: auto;
+  border: 4px solid var(--color-brand);
+}
+
+/* ======================== */
+/*       Site Header         */
+/* ======================== */
+
+.site-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 8px;
+  background: var(--color-bg-main);
+}
+
+/* CTFDA theme header gradient */
+.site-header.ctfda {
+  background: linear-gradient(
+    90deg,
+    var(--ctfda-blue-1) 0%,
+    var(--ctfda-blue-2) 20%,
+    var(--ctfda-blue-3) 40%,
+    var(--ctfda-indigo) 60%,
+    var(--ctfda-purple-1) 80%,
+    var(--ctfda-purple-2) 100%
+  );
+}
+
+/* On small screens, stack header items */
+@media (max-width: 210px) {
+  .site-header {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+.site-header-title {
+  color: #ffffff;
+  margin: 0;
+}
+
+.header-image {
+  height: 4rem;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* On small screens, reduce header-image height */
+@media (max-width: 768px) {
+  .header-image {
+    height: 3rem; /* Slightly smaller on phones */
+  }
+}
+
+/* ======================== */
+/*       Utility Classes    */
+/* ======================== */
+
+.hidden {
+  display: none;
+}
+
+.close-popup-btn {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+/* ======================== */
+/*         Tables           */
+/* ======================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+td {
+  border: 1.5px solid var(--color-brand);
+  padding: 5px;
+  text-align: center;
+  background: var(--color-bg-white);
+}
+
+th {
+  border: 1.5px solid var(--color-brand);
+  background: var(--color-headings-bg);
+  padding: 8px;
+  color: var(--color-brand);
+  font-size: 13px;
+  text-align: center;
+}
+
+#scoringTableBody td,
+#scoringTableBody th {
+  font-size: 10px;
+}
+
+/* On small screens, increase table font size slightly */
+@media (max-width: 768px) {
+  #scoringTableBody td,
+  #scoringTableBody th {
+    font-size: 12px; /* Improved readability on phones */
+  }
+}
+
+/* Emphasize ABBA (1st) and Total (4th) columns */
+#scoringTableBody tr td:nth-child(1),
+#scoringTableBody tr td:nth-child(4) {
+  font-weight: 700;
+  font-size: calc(1em + 2pt);
+}
+
+
+/* ======================== */
+/*    Inputs & Selects      */
+/* ======================== */
+
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-brand);
+  border-radius: 4px;
+  background: var(--color-bg-main);
+  font-size: 16px;
+}
+
+select {
+  width: 95%;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-brand)
+}
+
+input {
+  padding: 8px;
+  border: 1px solid var(--color-brand);
+  border-radius: 4px;
+  background: var(--color-bg-main);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ======================== */
+/*         Buttons          */
+/* ======================== */
+
+input[type="button"],
+.main-button {
+  padding: 8px;
+  background: var(--color-brand);
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  flex: 1;
+}
+
+input[type="button"]:hover,
+.main-button:hover {
+  background: #4f202f;
+}
+
+.main-button:disabled {
+  background: #8a86b3;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.taller-button {
+  padding: 15px;
+}
+
+.PausePlay-button {
+  min-width: 100px;
+  padding: 2em 0 2em;
+}
+
+/* Add score button layout */
+.add-score-button {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 15px;
+  width: 100%;
+  margin: 0 0 1.25rem;
+}
+
+/* Add score buttons */
+.add-score {
+  display: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 1.5em 0 1.5em;
+
+}
+
+/* Final submit button */
+.submit-section {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 1rem;
+  height: 5rem;
+}
+
+/* ======================== */
+/*          Popup           */
+/* ======================== */
+
+.popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-bg-white);
+  padding: 10px;
+  box-shadow: 0 0 10px var(--color-shadow);
+  z-index: 100;
+  border-radius: 15px;
+}
+
+/* Background dimming during popup */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+#loadingOverlay {
+  z-index: 150;
+}
+
+#loadingPopup {
+  z-index: 200;
+  max-width: 320px;
+  text-align: center;
+  padding: 20px;
+}
+
+#setupOverlay {
+  z-index: 160;
+}
+
+#setupPopup {
+  z-index: 220;
+  width: min(90vw, 700px);
+  max-width: 700px;
+  padding: 20px;
+}
+
+#scorePopup {
+  z-index: 220;
+  max-width: 420px;
+  padding: 20px;
+}
+
+#timeOverlay {
+  z-index: 165;
+}
+
+#timePopup {
+  z-index: 225;
+  max-width: 420px;
+  padding: 20px;
+}
+
+#closeTimePopupBtn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+#setupPopup .popup-field {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+#setupPopup label {
+  margin-bottom: 0;
+  flex: 1 1 180px;
+  max-width: 50%;
+}
+
+#setupPopup input,
+#setupPopup select {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+#setupPopup .popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.setup-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.time-additions-trigger {
+  display: flex;
+  justify-content: center;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.time-additions-trigger .main-button {
+  flex: 0 0 auto;
+  min-width: 200px;
+}
+
+.timer-hint {
+  text-align: center;
+  font-size: 0.85em;
+  margin-top: 0.5rem;
+  color: var(--color-brand);
+}
+
+.timer-subtext {
+  font-size: 0.75em;
+  margin-bottom: 0.25rem;
+  color: var(--color-brand);
+}
+
+.teams-display {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.timeout-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 15px 0;
+}
+
+.timeout-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.timeout-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeout-button {
+  min-width: 160px;
+}
+
+.timeout-remaining {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.9em;
+}
+
+.timeout-half {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.halftime-button {
+  min-width: 200px;
+}
+
+.stoppage-control {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.stoppage-button {
+  width: 100%;
+  background-color: #ff8e97;
+  color: #8a1f2b;
+}
+
+.stoppage-button.active {
+  background-color: #c0392b;
+}
+
+.stoppage-button.active:hover {
+  background-color: #962d22;
+}
+
+.event-cell {
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+}
+
+.event-row {
+  background-color: rgba(47, 42, 133, 0.06);
+  color: var(--color-brand);
+}
+
+.event-row td {
+  background-color: transparent;
+}
+
+.event-row.event-timeout-row {
+  background-color: rgba(210, 247, 196, 0.5);
+  color: var(--color-brand);
+}
+
+.event-row.halftime-row {
+  background-color: rgba(46, 137, 31, 0.4);
+  color: #ffffff;
+}
+
+.event-row.stoppage-row {
+  background-color: #ffccd1;
+  color: #8a1f2b;
+}
+
+#scoringTable.abba-hidden th.abba-col,
+#scoringTable.abba-hidden td.abba-cell {
+  display: none;
+}
+
+
+.popup select,
+.popup input[type="button"] {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.popup label {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* ======================== */
+/*  Team Lists Side by Side */
+/* ======================== */
+
+.team-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.team-list-container > div {
+  width: 100%;
+}
+
+
+/* ======================== */
+/*    Success Message       */
+/* ======================== */
+
+/* ======================== */
+/*  Timer-Related CSS       */
+/* ======================== */
+
+/* General timer display styling */
+.timer-display {
+  font-size: 6em;
+  font-weight: 700;
+}
+
+.timer-right {
+  text-align: center;
+}
+
+/* When the countdown is below zero, text becomes red */
+.timer-negative {
+  color: red;
+}
+
+/* Timer column background while running */
+.timer-running {
+  background-color: lightgreen;
+}
+
+/* Timer column background while paused */
+.timer-paused {
+  background-color: lightcoral;
+}
+
+/* ======================== */
+/*     Mobile browsers      */
+/* ======================== */
+
+@media (max-width: 768px) {
+  .form-container {
+    max-width: 95%;
+  }
+  body {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 16px;
+    padding: clamp(0.5rem, 3vw, 1rem);
+  }
+
+  .form-container {
+    width: 100%;
+    padding: clamp(0.6rem, 4vw, 0.9rem);
+    border-width: 3px;
+  }
+
+  .site-header {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+.timer-table,
+.timer-table td,
+.timer-table input {
+  width: 100%;
+}
+
+.timer-display {
+  font-size: 3em;
+  font-weight: 700;
+}
+
+.timer-input {
+  font-size: 1.1rem;
+}
+
+.main-button,
+.timeout-button,
+.halftime-button,
+.teams-display {
+    width: 100%;
+  }
+
+  .timeout-button,
+  .halftime-button,
+  .main-button {
+    min-width: 120px;
+  }
+
+  .timeout-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .timeout-team {
+    width: 100%;
+  }
+
+  table,
+  th,
+  td {
+    font-size: 0.9rem;
+  }
+
+  #scoringTableBody td,
+  #scoringTableBody th {
+    font-size: 0.85rem;
+  }
+
+  .team-list-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+}
+
+/* ======================== */
+/*   Scoring Table Styles   */
+/* ======================== */
+
+/* Scoring table layout */
+#scoringTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+#scoringTable th,
+#scoringTable td {
+  padding: 4px 6px;
+}
+
+#scoringTable th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#scoringTable td {
+  vertical-align: middle;
+}
+
+#scoringTable td:not(.event-cell):not(.score-cell):not(.assist-cell) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#scoringTable td.score-cell,
+#scoringTable td.assist-cell {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-overflow: clip;
+}
+
+#scoringTable .event-cell {
+  white-space: normal;
+}
+
+/* Column weighting */
+#scoringTable th.abba-col,
+#scoringTable td.abba-cell {
+  width: 8%;
+  font-weight: 700;
+}
+
+#scoringTable th.score-col,
+#scoringTable td:nth-child(2),
+#scoringTable td:nth-child(5) {
+  width: 18%;
+}
+
+#scoringTable th.assist-col,
+#scoringTable td:nth-child(3),
+#scoringTable td:nth-child(6) {
+  width: 18%;
+}
+
+#scoringTable th.total-col,
+#scoringTable td.total {
+  width: 12%;
+  font-weight: 700;
+}
+
+#scoringTable th:last-child,
+#scoringTable td:last-child {
+  width: 8%;
+}
+
+#scoringTable .edit-btn {
+  width: 100%;
+  max-width: 64px;
+  min-height: 24px;
+  padding: 4px;
+  font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#scoringTable .scoring-cell-truncated {
+  text-overflow: ellipsis;
+}
+
+#scoringTable .edit-btn .icon-gear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#scoringTable .edit-btn .icon-gear::before {
+  content: "\2699";
+}
+
+/* Header weights */
+th.abba-col { font-size: calc(1em - 7pt); }
+th.score-col, th.assist-col { font-weight: 400; }
+th.total-col { font-size: calc(1em - 1pt); }
+
+/* Body cells */
+td.abba-cell { font-weight: 500; }
+td.total { font-size: calc(1em - 1pt); }
+
+/* Place ABBA label and value */
+.abba-label { display: block; margin-bottom: 2px; }
+
+.abba-value {
+  display: block;
+  font-weight: 600;
+}
+
+
+/* Not sure - Body formatting */
+body {
+  font-family: Montserrat, Helvetica;
+  background-color: var(--color-bg-main);
+  background-image: url("../images/Disk_background.png");
+  background-repeat: repeat;
+  color: var(--color-brand);
+  line-height: 1.2;
+  padding: 1rem; /* breathing room on all sides */
+}
+
+/* ======================== */
+/*      Main Container      */
+/* ======================== */
+.form-container {
+  background: var(--color-bg-white);
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--color-shadow);
+  max-width: 700px;
+  margin: auto;
+  border: 4px solid var(--color-brand);
+}
+
+/* Hero: a Full width banner, like a header */
+.hero {
+  position: relative;
+  height: 120px;
+  background-color: var(--color-headings-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.hero-overlay {
+  background: rgba(0,0,0,0.6);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.hero-logo {
+  display: block;
+  margin: 0 auto;
+  width: 50%;           /* scales the image to 80% of the container */
+  height: auto;         /* preserves the aspect ratio */
+  max-width: 500px;     /* optional: prevents it from getting too large */
+  border-radius: 8px;
+}
+
+.hero h1 {
+  color: var(--color-bg-white);
+  font-size: 1.6rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Home page navigation grid */
+.grid-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Home page navigation grid items */
+.grid-item {
+  display: block;
+  width: 85%;
+  max-width: 400pt;
+  margin: 0 auto;
+  padding: 1.2rem;
+  background: var(--color-brand);
+  color: var(--color-bg-white);
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+/* Home page navigation grid items (specific for about page) */
+.grid-item-about {
+  display: block;
+  width: 40%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: var(--color-brand);
+  color: var(--color-bg-white);
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+/* Hover effect for grid-item */
+.grid-item:hover,
+.grid-item:focus {
+  background: #380b23;
+  transform: translateY(-2px);
+}
+
+/* Footer at bottom, full-width */
+.site-footer {
+  background: var(--color-bg-white);
+  color: var(--color-brand);
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-shadow);
+  margin-top: 2rem;
+}
+
+/* PDF integration format */
+.pdf-container embed {
+  width: 95%;
+  max-width: 500pt;
+  margin: 0 auto;
+  height: 500px;
+  border: var(--color-brand);
+  border-radius: 10pt;
+  border-width: 6pt;
+}
+
+/* Slight enhancements at tablet sizes */
+@media (min-width: 600px) {
+  .hero {
+    height: 240px;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+  .container {
+    padding: 0;
+  }
+}
+
+/* — Make images & PDFs fluid — */
+.responsive-image,
+.responsive-pdf {
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.site-header{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 8px;
+  background: var(--color-bg-main);
+}
+
+.site-title{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.25rem;
+}
+
+.header-image{
+  height: 4rem;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.content-image{
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.home-button{
+  display: inline-block;
+  padding: 0.75rem 3rem;
+  background: var(--color-brand,#6e3542);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+
+/* ======================== */
+/*       Utility Classes    */
+/* ======================== */
+.hidden {
+  display: none;
+}
+
+.close-popup-btn {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+/* ======================== */
+/*   Logo & Title Section   */
+/* ======================== */
+.logo-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  height: 80px;
+  margin-right: 20px;
+}
+
+/* ======================== */
+/*         Headings         */
+/* ======================== */
+h1 {
+  text-align: center;
+  color: var(--color-brand);
+  font-size: 25px;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+h2 {
+  text-align: center;
+  color: var(--color-brand);
+  font-size: 30px;
+  padding-top: 1rem;
+}
+
+h3 {
+  text-align: center;
+  color: var(--color-brand);
+  font-size: 25px;
+  padding-top: 0.5rem;
+}
+
+/* ======================== */
+/*         Tables           */
+/* ======================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+td {
+  border: 1px solid var(--color-brand);
+  padding: 8px;
+  text-align: center;
+  background: var(--color-bg-white);
+}
+
+th {
+  border: 1px solid var(--color-brand);
+  background: var(--color-headings-bg);
+  padding: 8px;
+  color: var(--color-brand);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ======================== */
+/*    Inputs & Selects      */
+/* ======================== */
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-brand);
+  border-radius: 4px;
+  background: var(--color-bg-main);
+  font-size: 14px;
+}
+
+select {
+  width: 90%;
+  border-radius: 8px;
+}
+
+/* ======================== */
+/*         Buttons          */
+/* ======================== */
+input[type="button"],
+.add-score {
+  padding: 10px;
+  background: var(--color-brand);
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+  flex: 1;
+}
+
+input[type="button"]:hover,
+.add-score:hover {
+  background: #5a2435;
+}
+
+.taller-button {
+  padding: 20px;
+}
+
+
