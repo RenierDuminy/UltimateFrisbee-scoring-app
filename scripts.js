@@ -8,8 +8,8 @@
 // =====================================================
 const CONFIG = {
 
-  API_URL: "https://docs.google.com/spreadsheets/d/1mhuN_H1C_DZ26r1NQRf4muQwszSd8F9mCfyWF5Iwjjo/export?format=csv&gid=884172048",
-  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbwDvvk2APZBToiqJ9D0FQQX2KlSbH5lZcfYOT4qTJnwiQjSSEUDlUD5WHZGv5eHJ2mk/exec",
+  API_URL: "URL_TO_PULL_DATA",
+  SUBMIT_URL: "URL_TO_POST_DATA",
   DEFAULT_TIMER_MINUTES: 100,
   LOADING_ANIMATION_INTERVAL: 500,
   AUTO_SAVE_INTERVAL: 2000, // Auto-save every 2 seconds
@@ -3559,3 +3559,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Make app instance available globally for debugging
 window.ScorekeeperApp = app;
+
