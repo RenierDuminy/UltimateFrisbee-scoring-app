@@ -14,6 +14,7 @@
   --ctfda-indigo: #2f2a85;
   --ctfda-purple-1: #5f3fa3;
   --ctfda-purple-2: #9d7fe6;
+  --layout-max-width: 700px;
 }
 
 /* Stripping all margins/padding avoids cross‐browser inconsistencies */
@@ -26,12 +27,22 @@
 }
 
 /* Main body formatting */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+}
+
 body {
   font-family: Montserrat, Helvetica;
   color: var(--color-brand);
   line-height: 1.2;
-  padding: 1rem; /* breathing room on all sides */
-  font-size: 20px;
+  padding: clamp(0.75rem, 2vw, 1.5rem); /* breathing room on all sides */
+  font-size: clamp(16px, 2.4vw, 20px);
+  background-color: var(--color-bg-main);
+  background-image: url("../images/Disk_background.png");
+  background-repeat: repeat;
+  overflow-x: hidden;
 }
 
 
@@ -41,10 +52,10 @@ body {
 
 .form-container {
   background-color: var(--color-bg-white);
-  padding: 10px;
+  padding: clamp(0.5rem, 2vw, 1rem);
   border-radius: 15px;
   box-shadow: 0 0 10px var(--color-shadow);
-  max-width: 700px;
+  width: min(100%, var(--layout-max-width));
   margin: auto;
   border: 4px solid var(--color-brand);
 }
@@ -133,11 +144,21 @@ table {
   margin-bottom: 12px;
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  width: 100%;
+}
+
 td {
   border: 1.5px solid var(--color-brand);
   padding: 5px;
   text-align: center;
   background: var(--color-bg-white);
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
 }
 
 th {
@@ -145,21 +166,13 @@ th {
   background: var(--color-headings-bg);
   padding: 8px;
   color: var(--color-brand);
-  font-size: 13px;
+  font-size: clamp(0.8rem, 2.1vw, 0.95rem);
   text-align: center;
 }
 
 #scoringTableBody td,
 #scoringTableBody th {
-  font-size: 10px;
-}
-
-/* On small screens, increase table font size slightly */
-@media (max-width: 768px) {
-  #scoringTableBody td,
-  #scoringTableBody th {
-    font-size: 12px; /* Improved readability on phones */
-  }
+  font-size: clamp(0.65rem, 1.6vw, 0.8rem);
 }
 
 /* Emphasize ABBA (1st) and Total (4th) columns */
@@ -181,7 +194,8 @@ textarea {
   border: 1px solid var(--color-brand);
   border-radius: 4px;
   background: var(--color-bg-main);
-  font-size: 16px;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  min-height: 120px;
 }
 
 select {
@@ -195,7 +209,7 @@ input {
   border: 1px solid var(--color-brand);
   border-radius: 4px;
   background: var(--color-bg-main);
-  font-size: 16px;
+  font-size: clamp(0.85rem, 2vw, 1rem);
   text-align: center;
 }
 
@@ -205,13 +219,13 @@ input {
 
 input[type="button"],
 .main-button {
-  padding: 8px;
+  padding: clamp(0.45rem, 1.5vw, 0.85rem);
   background: var(--color-brand);
   color: #ffffff;
   border: none;
   border-radius: 15px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   flex: 1;
 }
 
@@ -227,11 +241,11 @@ input[type="button"]:hover,
 }
 
 .taller-button {
-  padding: 15px;
+  padding: clamp(0.6rem, 2vw, 1.1rem);
 }
 
 .PausePlay-button {
-  min-width: 100px;
+  min-width: 80px;
   padding: 2em 0 2em;
 }
 
@@ -272,10 +286,12 @@ input[type="button"]:hover,
   top: 50%;
   transform: translate(-50%, -50%);
   background: var(--color-bg-white);
-  padding: 10px;
+  padding: clamp(0.6rem, 2vw, 1.25rem);
   box-shadow: 0 0 10px var(--color-shadow);
   z-index: 100;
   border-radius: 15px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 /* Background dimming during popup */
@@ -305,9 +321,9 @@ input[type="button"]:hover,
 
 #setupPopup {
   z-index: 220;
-  width: min(90vw, 700px);
-  max-width: 700px;
-  padding: 20px;
+  width: min(92vw, var(--layout-max-width));
+  max-width: var(--layout-max-width);
+  padding: clamp(0.75rem, 3vw, 1.25rem);
 }
 
 #scorePopup {
@@ -406,8 +422,10 @@ input[type="button"]:hover,
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
 }
 
 .timeout-team {
@@ -415,6 +433,7 @@ input[type="button"]:hover,
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  min-width: 220px;
 }
 
 .timeout-button {
@@ -534,9 +553,18 @@ input[type="button"]:hover,
 /*  Timer-Related CSS       */
 /* ======================== */
 
+.timer-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.timer-table input {
+  width: 100%;
+}
+
 /* General timer display styling */
 .timer-display {
-  font-size: 6em;
+  font-size: clamp(3rem, 10vw, 6rem);
   font-weight: 700;
 }
 
@@ -559,6 +587,10 @@ input[type="button"]:hover,
   background-color: lightcoral;
 }
 
+.timer-input {
+  font-size: clamp(0.9rem, 2.1vw, 1.1rem);
+}
+
 /* ======================== */
 /*     Mobile browsers      */
 /* ======================== */
@@ -569,83 +601,6 @@ input[type="button"]:hover,
   }
   body {
     padding: 0.5rem;
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    font-size: 16px;
-    padding: clamp(0.5rem, 3vw, 1rem);
-  }
-
-  .form-container {
-    width: 100%;
-    padding: clamp(0.6rem, 4vw, 0.9rem);
-    border-width: 3px;
-  }
-
-  .site-header {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 0.75rem;
-  }
-
-.timer-table,
-.timer-table td,
-.timer-table input {
-  width: 100%;
-}
-
-.timer-display {
-  font-size: 3em;
-  font-weight: 700;
-}
-
-.timer-input {
-  font-size: 1.1rem;
-}
-
-.main-button,
-.timeout-button,
-.halftime-button,
-.teams-display {
-    width: 100%;
-  }
-
-  .timeout-button,
-  .halftime-button,
-  .main-button {
-    min-width: 120px;
-  }
-
-  .timeout-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-
-  .timeout-team {
-    width: 100%;
-  }
-
-  table,
-  th,
-  td {
-    font-size: 0.9rem;
-  }
-
-  #scoringTableBody td,
-  #scoringTableBody th {
-    font-size: 0.85rem;
-  }
-
-  .team-list-container {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  textarea {
-    min-height: 120px;
   }
 }
 
@@ -767,28 +722,6 @@ td.total { font-size: calc(1em - 1pt); }
 
 
 /* Not sure - Body formatting */
-body {
-  font-family: Montserrat, Helvetica;
-  background-color: var(--color-bg-main);
-  background-image: url("../images/Disk_background.png");
-  background-repeat: repeat;
-  color: var(--color-brand);
-  line-height: 1.2;
-  padding: 1rem; /* breathing room on all sides */
-}
-
-/* ======================== */
-/*      Main Container      */
-/* ======================== */
-.form-container {
-  background: var(--color-bg-white);
-  padding: 10px;
-  border-radius: 15px;
-  box-shadow: 0 0 10px var(--color-shadow);
-  max-width: 700px;
-  margin: auto;
-  border: 4px solid var(--color-brand);
-}
 
 /* Hero: a Full width banner, like a header */
 .hero {
@@ -988,93 +921,25 @@ body {
 /* ======================== */
 /*         Headings         */
 /* ======================== */
-h1 {
+h1,
+h2,
+h3 {
   text-align: center;
   color: var(--color-brand);
-  font-size: 25px;
+}
+
+h1 {
+  font-size: clamp(1.2rem, 4vw, 1.75rem);
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
 }
 
 h2 {
-  text-align: center;
-  color: var(--color-brand);
-  font-size: 30px;
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
   padding-top: 1rem;
 }
 
 h3 {
-  text-align: center;
-  color: var(--color-brand);
-  font-size: 25px;
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
   padding-top: 0.5rem;
 }
-
-/* ======================== */
-/*         Tables           */
-/* ======================== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 12px;
-}
-
-td {
-  border: 1px solid var(--color-brand);
-  padding: 8px;
-  text-align: center;
-  background: var(--color-bg-white);
-}
-
-th {
-  border: 1px solid var(--color-brand);
-  background: var(--color-headings-bg);
-  padding: 8px;
-  color: var(--color-brand);
-  font-size: 13px;
-  text-align: center;
-}
-
-/* ======================== */
-/*    Inputs & Selects      */
-/* ======================== */
-select,
-textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid var(--color-brand);
-  border-radius: 4px;
-  background: var(--color-bg-main);
-  font-size: 14px;
-}
-
-select {
-  width: 90%;
-  border-radius: 8px;
-}
-
-/* ======================== */
-/*         Buttons          */
-/* ======================== */
-input[type="button"],
-.add-score {
-  padding: 10px;
-  background: var(--color-brand);
-  color: #ffffff;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 12px;
-  flex: 1;
-}
-
-input[type="button"]:hover,
-.add-score:hover {
-  background: #5a2435;
-}
-
-.taller-button {
-  padding: 20px;
-}
-
-
