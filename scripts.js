@@ -8,7 +8,7 @@
 // =====================================================
 const CONFIG = {
 
-  API_URL: "URL_TO_PULL_DATA",
+  API_URL: "https://docs.google.com/spreadsheets/d/1mhuN_H1C_DZ26r1NQRf4muQwszSd8F9mCfyWF5Iwjjo/export?format=csv&gid=884172048",
   SUBMIT_URL: "URL_TO_POST_DATA",
   DEFAULT_TIMER_MINUTES: 100,
   LOADING_ANIMATION_INTERVAL: 500,
@@ -276,7 +276,7 @@ class PersistenceManager {
       timeoutDuration: 75,
       timeoutsTotal: 2,
       timeoutsPerHalf: 0,
-      abbaStart: 'M',
+      abbaStart: 'NONE',
       stoppageActive: false,
       timeoutState: {
         A: { totalRemaining: 2, halfRemaining: 2 },
@@ -546,7 +546,7 @@ class DataManager {
       timeoutDuration: 75,
       timeoutsTotal: 2,
       timeoutsPerHalf: 0,
-      abbaStart: 'M',
+      abbaStart: 'NONE',
       stoppageActive: false,
       timeoutState: {
         A: { totalRemaining: 2, halfRemaining: 2 },
@@ -1084,7 +1084,7 @@ class ScorekeeperApp {
     this.halftimePendingReason = null;
     this.halftimeReasonResolved = null;
     this.isRestoring = false;
-    this.abbaStart = 'M';
+    this.abbaStart = 'NONE';
     this.matchStarted = false;
     this.gameStoppageActive = false;
     this.hardCapReached = false;
@@ -1219,8 +1219,8 @@ class ScorekeeperApp {
           timeoutsPerHalf: 0
         };
         this.applyGameSettingsToUI();
-        this.abbaStart = 'M';
-        this.setAbbaVisibility(true);
+        this.abbaStart = 'NONE';
+        this.setAbbaVisibility(this.abbaStart !== 'NONE');
         this.updateAbbaDisplay();
         this.clearAbbaCells();
         this.gameStoppageActive = false;
@@ -1298,10 +1298,10 @@ class ScorekeeperApp {
 
     // Restore ABBA start if present
     const storedAbba = gameState.abbaStart;
-    if (storedAbba) {
-      this.abbaStart = storedAbba === 'F' || storedAbba === 'NONE' ? storedAbba : 'M';
+    if (storedAbba === 'M' || storedAbba === 'F' || storedAbba === 'NONE') {
+      this.abbaStart = storedAbba;
     } else {
-      this.abbaStart = 'M';
+      this.abbaStart = 'NONE';
     }
     this.setAbbaVisibility(this.abbaStart !== 'NONE');
     this.updateAbbaDisplay();
@@ -1672,7 +1672,7 @@ class ScorekeeperApp {
       return;
     }
 
-    const LONG_PRESS_DURATION_MS = 5000;
+    const LONG_PRESS_DURATION_MS = 3000;
     let holdTimeout = null;
     let longPressTriggered = false;
     let suppressClick = false;
@@ -2317,8 +2317,12 @@ class ScorekeeperApp {
    * ABBA selector changed
    */
   handleAbbaChange(newValue = null, shouldAutoSave = true) {
-    const selected = typeof newValue === 'string' ? newValue : this.abbaStart || 'M';
-    this.abbaStart = selected === 'F' || selected === 'NONE' ? selected : 'M';
+    const selected = typeof newValue === 'string' ? newValue : this.abbaStart || 'NONE';
+    if (selected === 'M' || selected === 'F' || selected === 'NONE') {
+      this.abbaStart = selected;
+    } else {
+      this.abbaStart = 'NONE';
+    }
     this.setAbbaVisibility(this.abbaStart !== 'NONE');
     this.updateAbbaDisplay();
     if (this.abbaStart !== 'NONE') {
@@ -2733,7 +2737,7 @@ class ScorekeeperApp {
 
     // Hide delete when adding new
     const deleteBtn = document.getElementById('deleteBtn');
-    if (deleteBtn) deleteBtn.style.display = 'none';
+    if (deleteBtn) deleteBtn.classList.add('hidden');
 
     this.populatePlayerDropdowns(team);
   }
@@ -3064,7 +3068,7 @@ class ScorekeeperApp {
 
     // Show delete in edit mode
     const deleteBtn = document.getElementById('deleteBtn');
-    if (deleteBtn) deleteBtn.style.display = 'inline-block';
+    if (deleteBtn) deleteBtn.classList.remove('hidden');
 
     // Determine team
     const teamAName = document.getElementById('teamA')?.value || '';
@@ -3206,7 +3210,7 @@ class ScorekeeperApp {
     if (halftimeDurationInput) halftimeDurationInput.value = this.gameSettings.halftimeBreakDuration;
 
     const setupAbba = document.getElementById('setupAbba');
-    if (setupAbba) setupAbba.value = this.abbaStart || 'M';
+    if (setupAbba) setupAbba.value = this.abbaStart || 'NONE';
   }
 
   /**
@@ -3259,7 +3263,7 @@ class ScorekeeperApp {
       120
     );
 
-    const abbaSelection = document.getElementById('setupAbba')?.value || this.abbaStart || 'M';
+    const abbaSelection = document.getElementById('setupAbba')?.value || this.abbaStart || 'NONE';
 
     this.gameSettings = {
       matchDuration: newMatchDuration,

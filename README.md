@@ -8,12 +8,12 @@ Branding (logo, colors, typography) is fully configurable for any league, club, 
 
 ## 1) Features
 
-* **Match setup**: select Team A/B and manage rosters; scorer/assist selection is optimized for quick input.
-* **Dual timers**: primary game clock (e.g., `100:00`) and a secondary timer (e.g., `75s`) with start/pause/reset controls.
-* **Event logging**: goals, assists, halftime, timeouts (with limits), and stoppages; edit/delete for corrections.
+* **Match setup**: responsive popup to select Team A/B, configure durations/limits, and manage rosters; compact dropdowns keep everything visible on phones.
+* **Dual timers**: primary game clock (e.g., `100:00`) and a secondary timer (e.g., `75s`) with start/pause/reset controls that scale with viewport width.
+* **Event logging**: goals, assists, halftime, timeouts (with limits), and stoppages; edit/delete for corrections with a centered red delete action for clarity.
 * **Submission**: one-click upload of all events to Google Sheets; visual progress and navigation-away protection.
 * **Mixed formats**: optional ABBA indicator (M/F/None) for mixed-division workflows.
-* **Responsive UI**: large targets and high contrast for phone and small tablet use on the sideline.
+* **Responsive UI**: layout, tables, and popups scale fluidly to any width without horizontal scrolling; buttons remain touch-friendly without being oversized.
 
 ---
 
@@ -107,7 +107,7 @@ Minimum columns are:
 
 ## 7) Theming & Configuration
 
-* Replace the logo/icon assets and adjust CSS variables in `styles.css` to match your organization’s brand.
+* Replace the logo/icon assets and adjust CSS variables in `styles.css` to match your organization's brand.
 * Rosters can be captured via free-text, or you may extend the app to pull JSON/CSV/Sheets rosters.
 * Time limits, default durations, and event types are configurable in `scripts.js`.
 

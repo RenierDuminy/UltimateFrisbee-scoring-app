@@ -195,13 +195,18 @@ textarea {
   border-radius: 4px;
   background: var(--color-bg-main);
   font-size: clamp(0.85rem, 2vw, 1rem);
-  min-height: 120px;
 }
 
 select {
   width: 95%;
   border-radius: 8px;
-  border: 1.5px solid var(--color-brand)
+  border: 1.5px solid var(--color-brand);
+  padding: clamp(0.25rem, 0.9vw, 0.45rem);
+  min-height: clamp(1.2rem, 2.5vw, 1.6rem);
+}
+
+textarea {
+  min-height: 120px;
 }
 
 input {
@@ -363,8 +368,12 @@ input[type="button"]:hover,
 
 #setupPopup input,
 #setupPopup select {
-  flex: 1 1 160px;
-  min-width: 140px;
+  flex: 0 1 30%;
+  min-width: 120px;
+  max-width: 220px;
+  padding: clamp(0.2rem, 0.8vw, 0.4rem);
+  min-height: clamp(1.2rem, 3vw, 1.8rem);
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
 }
 
 #setupPopup .popup-actions {
@@ -560,6 +569,14 @@ input[type="button"]:hover,
 
 .timer-table input {
   width: 100%;
+}
+
+.timer-left {
+  width: 65%;
+}
+
+.timer-right {
+  width: 35%;
 }
 
 /* General timer display styling */
@@ -942,4 +959,21 @@ h2 {
 h3 {
   font-size: clamp(1.2rem, 3.5vw, 1.6rem);
   padding-top: 0.5rem;
+}
+.popup-delete-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.danger-button {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  max-width: 200px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.danger-button:hover {
+  background-color: #962d22;
 }

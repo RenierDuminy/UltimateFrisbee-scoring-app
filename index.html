@@ -6,17 +6,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.9">
   <title>Score Sheet</title>
-  <link rel="icon" href="./CTFDA - logo.png" type="image/png"> 
+  <link rel="icon" href="./logo.png" type="image/png"> 
   <link rel="stylesheet" href="styles.css">
-  <link rel="preload" href="/images/CTFDA - logo.png" as="image">
+  <link rel="preload" href="/images/logo.png" as="image">
 </head>
 
 <body>
   <div class="form-container">
 
     <div class="site-header ctfda">
-      <img src="CTFDA - logo.png" alt="Cape Town Flying Disc Association" class="header-image">
-      <h2 class="site-header-title">CTFDA League</h2>
+      <img src="logo.png" alt="Cape Town Flying Disc Association" class="header-image">
+      <h2 class="site-header-title">Frisbee League</h2>
     </div>
     <form id="scoreForm">
       <input type="hidden" id="time" name="time">
@@ -28,34 +28,36 @@
       <div class="teams-display" id="teamsDisplay">A vs B</div>
 
       <!-- site-header-->
-      <table class="timer-table">
-        <tr>
-          <td class="timer-left" id="timerColumn">
-            <div id="timerDisplay" class="timer-display">100:00</div>
+      <div class="table-wrapper">
+        <table class="timer-table">
+          <tr>
+            <td class="timer-left" id="timerColumn">
+              <div id="timerDisplay" class="timer-display">100:00</div>
 
-            <label for="countdownTime" class="timer-label">Set Time (min):</label>
-            <input type="number" id="countdownTime" value="100" min="1" max="300" class="timer-input">
-          </td>
-          
-          <td class="timer-right">
-            <button type="button" class="main-button taller-button PausePlay-button" id="playPauseBtn">Play</button>
-          </td>
-        </tr>
-        <!-- Seconds Timer Row -->
-        <tr>
-          <td class="timer-left" id="timerColumnSec">
-            <div id="timerDisplaySec" class="timer-display">01:15</div>
+              <label for="countdownTime" class="timer-label">Set Time (min):</label>
+              <input type="number" id="countdownTime" value="100" min="1" max="300" class="timer-input">
+            </td>
+            
+            <td class="timer-right">
+              <button type="button" class="main-button taller-button PausePlay-button" id="playPauseBtn">Play</button>
+            </td>
+          </tr>
+          <!-- Seconds Timer Row -->
+          <tr>
+            <td class="timer-left" id="timerColumnSec">
+              <div id="timerDisplaySec" class="timer-display">01:15</div>
 
-            <label for="countdownTimeSec" class="timer-label">Set Time (sec):</label>
-            <input type="number" id="countdownTimeSec" value="75" min="1" max="3600" class="timer-input">
-          </td>
-          
-          <td class="timer-right">
-            <div class="timer-subtext">Reset (hold 5s)</div>
-            <button type="button" class="main-button taller-button PausePlay-button" id="playPauseSecBtn">Play</button>
-          </td>
-        </tr>
-      </table>
+              <label for="countdownTimeSec" class="timer-label">Set Time (sec):</label>
+              <input type="number" id="countdownTimeSec" value="75" min="1" max="3600" class="timer-input">
+            </td>
+            
+            <td class="timer-right">
+              <div class="timer-subtext">Reset (hold 3s)</div>
+              <button type="button" class="main-button taller-button PausePlay-button" id="playPauseSecBtn">Play</button>
+            </td>
+          </tr>
+        </table>
+      </div>
 
       <div class="time-additions-trigger">
         <button type="button" class="main-button taller-button" id="openTimePopupBtn" disabled>Additional time options</button>
@@ -72,18 +74,20 @@
       </div>
 
       <!-- Scoring Table -->
-      <table id="scoringTable">
-        <tr>
-          <th class="abba-col"><span class="abba-label">ABBA</span><span id="abbaDisplay" class="abba-value">-</span></th>
-          <th class="score-col">Score A</th>
-          <th class="assist-col">Assist A</th>
-          <th class="total-col">Total</th>
-          <th class="score-col">Score B</th>
-          <th class="assist-col">Assist B</th>
-          <th>Edit</th>
-        </tr>
-        <tbody id="scoringTableBody"></tbody>
-      </table>
+      <div class="table-wrapper">
+        <table id="scoringTable">
+          <tr>
+            <th class="abba-col"><span class="abba-label">ABBA</span><span id="abbaDisplay" class="abba-value">-</span></th>
+            <th class="score-col">Score A</th>
+            <th class="assist-col">Assist A</th>
+            <th class="total-col">Total</th>
+            <th class="score-col">Score B</th>
+            <th class="assist-col">Assist B</th>
+            <th>Edit</th>
+          </tr>
+          <tbody id="scoringTableBody"></tbody>
+        </table>
+      </div>
 
       <!-- Team List Section -->
       <div class="team-list-container">
@@ -116,18 +120,20 @@
   <!-- Container to display logged data after submission -->
   <div id="loggedDataContainer" style="display: none;">
     <h3>Logged Data</h3>
-    <table id="loggedDataTable">
-      <thead>
-        <tr>
-          <th>GameID</th>
-          <th>Time</th>
-          <th>Team</th>
-          <th>Score</th>
-          <th>Assist</th>
-        </tr>
-      </thead>
-      <tbody id="loggedDataBody"></tbody>
-    </table>
+    <div class="table-wrapper">
+      <table id="loggedDataTable">
+        <thead>
+          <tr>
+            <th>GameID</th>
+            <th>Time</th>
+            <th>Team</th>
+            <th>Score</th>
+            <th>Assist</th>
+          </tr>
+        </thead>
+        <tbody id="loggedDataBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Popup for Adding/Editing Score -->
@@ -155,7 +161,9 @@
     </select>
 
     <input type="button" id="popupButton" value="Add Score">
-    <input type="button" id="deleteBtn" value="Delete" style="display:none; margin-left: 8px; background-color: #c0392b; color: #fff;">
+    <div class="popup-delete-wrapper">
+      <input type="button" id="deleteBtn" value="Delete" class="danger-button hidden">
+    </div>
   </div>
 
   <!-- Timeout edit popup -->
@@ -297,9 +305,9 @@
     <div class="popup-field">
       <label for="setupAbba">ABBA</label>
       <select id="setupAbba">
+        <option value="NONE" selected>None</option>
         <option value="M">Male</option>
         <option value="F">Female</option>
-        <option value="NONE">None</option>
       </select>
     </div>
     <div class="popup-actions">
