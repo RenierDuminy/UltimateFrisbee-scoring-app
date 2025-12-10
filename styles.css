@@ -17,7 +17,7 @@
   --layout-max-width: 700px;
 }
 
-/* Stripping all margins/padding avoids cross‐browser inconsistencies */
+/* Stripping all margins/padding avoids cross-browser inconsistencies */
 *,
 *::before,
 *::after {
@@ -853,7 +853,7 @@ td.total { font-size: calc(1em - 1pt); }
   }
 }
 
-/* — Make images & PDFs fluid — */
+/* -  Make images & PDFs fluid -  */
 .responsive-image,
 .responsive-pdf {
   width: 90%;

@@ -1,4 +1,4 @@
-# Ultimate Field-Side Score Sheet (Brand-Agnostic)
+# Ultimate Field-Side Score Sheet
 
 A lightweight, mobile-first web application for recording Ultimate matches in real time.
 The app runs entirely in the browser and posts structured match logs to Google Sheets via a minimal Google Apps Script backend.
