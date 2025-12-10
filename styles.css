@@ -151,6 +151,7 @@ table {
 
 .table-wrapper table {
   width: 100%;
+  overflow-x: auto;
 }
 
 td {
@@ -343,7 +344,7 @@ input[type="button"]:hover,
 
 #timePopup {
   z-index: 225;
-  max-width: 420px;
+  max-width: 100%;
   padding: 20px;
 }
 
@@ -369,11 +370,11 @@ input[type="button"]:hover,
 #setupPopup input,
 #setupPopup select {
   flex: 0 1 30%;
-  min-width: 120px;
-  max-width: 220px;
+  min-width: 150px;
+  max-width: 300px;
   padding: clamp(0.2rem, 0.8vw, 0.4rem);
-  min-height: clamp(1.2rem, 3vw, 1.8rem);
-  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  min-height: clamp(1.2rem, 15vw, 1.8rem);
+  font-size: clamp(0.8rem, 5vw, 0.95rem);
 }
 
 #setupPopup .popup-actions {
@@ -431,7 +432,7 @@ input[type="button"]:hover,
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   width: 100%;
   overflow-x: auto;
   padding-bottom: 0.5rem;
@@ -646,7 +647,7 @@ input[type="button"]:hover,
   vertical-align: middle;
 }
 
-#scoringTable td:not(.event-cell):not(.score-cell):not(.assist-cell) {
+#scoringTable td:not(.event-cell):not(.score-cell):not(.assist-cell):not(.total) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -687,6 +688,11 @@ input[type="button"]:hover,
 #scoringTable td.total {
   width: 12%;
   font-weight: 700;
+}
+#scoringTable td.total {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 #scoringTable th:last-child,
