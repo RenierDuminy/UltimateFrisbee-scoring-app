@@ -1,181 +1,91 @@
 # Ultimate Field-Side Score Sheet
 
-A lightweight, mobile-first web application for recording Ultimate matches in real time.
-The app runs entirely in the browser and posts structured match logs to Google Sheets via a minimal Google Apps Script backend.
-Branding (logo, colors, typography) is fully configurable for any league, club, school, or tournament.
+A touch-first Ultimate scorekeeping console that runs 100 % in the browser. The static bundle (`index.html`, `styles.css`, `scripts.js`) drives all match controls locally—dual timers, roster sync, score/event logging, timeout management, ABBA tracking, and CSV export—while the optional Google Apps Script backend (`function doPost.ts`) streams those events into Google Sheets. State is auto-saved in `localStorage`, so reloading the tab or swapping devices can restore the match in seconds.
 
 ---
 
-## 1) Features
+## How the app works
 
-* **Match setup**: responsive popup to select Team A/B, configure durations/limits, and manage rosters; compact dropdowns keep everything visible on phones.
-* **Dual timers**: primary game clock (e.g., `100:00`) and a secondary timer (e.g., `75s`) with start/pause/reset controls that scale with viewport width.
-* **Event logging**: goals, assists, halftime, timeouts (with limits), and stoppages; edit/delete for corrections with a centered red delete action for clarity.
-* **Submission**: one-click upload of all events to Google Sheets; visual progress and navigation-away protection.
-* **Mixed formats**: optional ABBA indicator (M/F/None) for mixed-division workflows.
-* **Responsive UI**: layout, tables, and popups scale fluidly to any width without horizontal scrolling; buttons remain touch-friendly without being oversized.
-
----
-
-## 2) Architecture & Data Flow
-
-**Frontend**: Static HTML/CSS/JavaScript single-page app (`index.html`, `styles.css`, `scripts.js`).
-**Backend**: Google Apps Script web app (`doPost.ts` or `Code.gs`) that writes to Google Sheets.
-
-Typical event row:
-
-```
-GameID, Timestamp, Event, Team, Scorer, Assist, Notes, ...
-```
-
-Submit flow:
-
-1. Browser aggregates the event log and POSTs JSON to the Apps Script **Web App URL**.
-2. Backend opens the target spreadsheet by **Sheet ID**, creates/locates a tab named `"<GameID>, <Date>"`, ensures headers exist (adds new fields as needed), then appends rows.
-3. Backend returns a JSON success/failure response.
+- **Match setup modal** – Choose Team A/B, populate rosters from a remote feed or manual entry, set match duration, halftime target/break, timeout allowances (total + per half), timeout length, and ABBA start (None/M/F). Settings persist between sessions.
+- **Dual timers** – Main countdown (default 100 min) plus a configurable seconds timer (default 75 s). Tap to play/pause; hold for three seconds to reset. Timers update their columns’ colors to show running vs paused state.
+- **Event logging** – Each goal captures scorer + assist, updates the scoreboard, and writes an ABBA value when enabled. Dedicated controls record match start, half time, timeouts (with edit reassignment), and game stoppages. Entries are editable/deletable via gear buttons.
+- **Timeout + stoppage governance** – Automatic decrementing of per-team totals, optional per-half resets, halftime-triggered timeout refresh, halftime break timer, and a stoppage toggle that pauses both timers until cleared.
+- **Auto persistence** – `localStorage` snapshots the entire `gameState` (scores, logs, timers, ABBA choice, stoppage flag, timeout counts, rosters) every two seconds and before unload. Returning within 24 hours prompts to restore the session.
+- **Exports** – On submit, the client always downloads a CSV and, if `CONFIG.SUBMIT_URL` is set, posts the structured log JSON to Apps Script. The backend creates/reuses a tab named `"<Team A> vs <Team B>, <date>"`, keeps headers synchronized, and appends all custom fields.
 
 ---
 
-## 3) Prerequisites
+## Setup
 
-* A Google account with access to Google Sheets and Apps Script.
-* Any static hosting (e.g., GitHub Pages, Netlify) or a local static server for development.
-* A modern mobile browser.
+### 1. Backend (Google Apps Script)
 
----
+1. Create or open the Google Sheet that will store match logs and copy its **Sheet ID**.
+2. Visit `script.new`, paste `function doPost.ts`, and replace `SHEET_ID` with the ID from step 1.
+3. Deploy as **Web app → New deployment**:
+   - Execute as **Me**
+   - Who has access: **Anyone with the link**
+   - Save the resulting `/exec` URL.
 
-## 4) Setup
+The handler automatically:
 
-### 4.1 Backend (Apps Script)
+- Sanitizes tab names (`"<GameID>, <Date>"`) to satisfy Sheets’ naming rules.
+- Reuses an existing tab per game and inserts columns if new log fields appear.
+- Appends event batches in a single `setValues` call for reliability.
 
-1. Create or open the Google Sheet that will store logs; copy its **Sheet ID** from the URL.
-2. Create a new Apps Script project (`script.new`) and add `doPost.ts` (or `Code.gs`).
-3. Set your Sheet ID constant:
+### 2. Frontend
 
-```ts
-// doPost.ts
-const SHEET_ID = 'YOUR_SHEET_ID_HERE';
-```
-
-4. Deploy the script as a **Web app**
-
-   * Execute as: **Me**
-   * Who has access: **Anyone with the link**
-   * Copy the generated **Web App URL**.
-
-### 4.2 Frontend
-
-1. Host `index.html`, `styles.css`, and `scripts.js`.
-2. In `scripts.js`, set the backend endpoint:
-
-```js
-// scripts.js
-const WEB_APP_URL = 'https://script.google.com/macros/s/XXXXXXXX/exec';
-```
-
-3. Open the hosted page on a phone/tablet and perform a test submission.
+1. Open `scripts.js` and update the `CONFIG` object:
+   - `API_URL` – optional remote roster source (CSV columns = team names, JSON shape `{ "Team": ["Player", ...] }`). Leave blank to skip fetching.
+   - `SUBMIT_URL` – Apps Script web app URL. When empty the UI still creates CSV downloads but skips the HTTP POST.
+   - Adjust other defaults (match duration, halftime trigger score, timeout counts, auto-save interval) as needed.
+2. Host `index.html`, `styles.css`, `scripts.js`, `logo.png`, and `page_icon.png` on any static host (GitHub Pages, Netlify, S3, local `python -m http.server`, etc.).
+3. Swap logos/colors by editing the assets and CSS variables in `styles.css`.
 
 ---
 
-## 5) Usage
+## Daily use
 
-1. Open **Match Setup**, select teams, and confirm rosters.
-2. Start the primary timer; use the secondary timer as needed.
-3. Log goals with scorer/assist, halftime, timeouts, and stoppages.
-4. Review/edit entries.
-5. Click **Submit** to write the log to the Google Sheet (a new tab named `"<GameID>, <Date>"` will be created on first submit).
-
----
-
-## 6) Data Model
-
-Minimum columns are:
-
-| Column      | Description                                               |
-| ----------- | --------------------------------------------------------- |
-| `GameID`    | Unique identifier for the match                           |
-| `Timestamp` | Wall-clock or game-clock time for the event               |
-| `Event`     | `goal`, `assist`, `timeout`, `halftime`, `stoppage`, etc. |
-| `Team`      | Team associated with the event                            |
-| `Scorer`    | Player name (if applicable)                               |
-| `Assist`    | Player name (if applicable)                               |
-| `Notes`     | Free-text, optional                                       |
-
-> The backend automatically adds new columns if your payload contains additional keys (e.g., `spiritScore`, `observerNotes`, `abba`).
+1. **Configure** – Tap *Match Setup*, choose teams, confirm rosters (auto-filled from the fetched data when available), set time controls, halftime, timeout durations/counts, and ABBA preference. Save to apply.
+2. **Start match** – Hit *Start Match* to arm the score buttons and start the main timer. The “Additional time options” button unlocks (timeouts, halftime, stoppage) only once the match begins.
+3. **Log points** – Use the team-specific “+ Add Score” buttons to select scorer/assist combos. The ABBA column fills automatically if enabled.
+4. **Manage events** – Timeouts reduce the respective team’s totals and can be reassigned via the timeout editor pop-up. Halftime resets per-half timeout counts, launches the halftime break timer, and can be triggered manually or automatically when the configured score/clock thresholds are met. Game stoppage pauses timers until cleared.
+5. **Edit or delete** – Every row has a gear icon. Score rows allow scorer/assist edits or deletion; timeout rows permit team reassignment; halftime rows allow removal.
+6. **Export** – Press *Submit*. The app validates that both teams are defined and at least one log exists, then:
+   - Downloads a CSV containing the base columns plus any extra fields (e.g., `Type`, `TeamLetter`, `HalftimeReason`, `scoreID`).
+   - Sends the same data to Google Sheets when `SUBMIT_URL` is configured, showing success/error toasts and a loading indicator.
+   - Resets scores, timers, timeout counters, stoppage state, and clears cached logs for the next game, while keeping rosters and configuration intact.
 
 ---
 
-## 7) Theming & Configuration
+## Data shape
 
-* Replace the logo/icon assets and adjust CSS variables in `styles.css` to match your organization's brand.
-* Rosters can be captured via free-text, or you may extend the app to pull JSON/CSV/Sheets rosters.
-* Time limits, default durations, and event types are configurable in `scripts.js`.
-
----
-
-## 8) Project Structure
-
-```
-.
-├─ index.html
-├─ styles.css
-├─ scripts.js
-├─ assets/
-│  ├─ logo.png
-│  └─ icon.png
-└─ backend/
-   └─ doPost.ts   // or Code.gs
-```
+- **GameID** – `"<Team A> vs <Team B>"`, generated from the current dropdown selections.
+- **Base columns** – `GameID`, `Time`, `Event`, `Team`, `Score`, `Assist`.
+- **Automatic extras** – Any additional log keys (e.g., `Type`, `EventType`, `TeamLetter`, `HalftimeReason`, `abba`) are appended to the header the first time they appear. Both CSV and Sheets uploads include every column to keep downstream tooling consistent.
+- **Sheet tabs** – Name format `"<GameID>, <Locale Date>"`, sanitized to <95 chars to satisfy Apps Script insert rules.
 
 ---
 
-## 9) Development
+## Configuration & theming
 
-* Serve locally with any static server, e.g.:
-
-  * `python -m http.server 8000`
-* Update `WEB_APP_URL` to point at your deployed Apps Script during testing.
-* Keep dependencies minimal to ensure fast load and reliable sideline usage.
-
----
-
-## 10) Security & Privacy
-
-* The Web App should run **as you** and be accessible to **Anyone with the link** to allow field devices to submit results.
-* No credentials are stored in the client. The backend only appends to the designated Sheet.
-* If additional access controls are required, restrict the Apps Script and implement server-side validation.
+- **Branding** – Update CSS variables in `styles.css` (`--color-brand`, `--color-bg-main`, etc.) and replace `logo.png`/`page_icon.png`.
+- **Timers** – Change `CONFIG.DEFAULT_TIMER_MINUTES`, `CONFIG.HALFTIME_SCORE_TARGET`, and the timeout duration defaults to match your competition rules. Users can still override these per match in the setup modal.
+- **Roster feeds** – `ApiManager.fetchTeams` autodetects CSV vs JSON. Responses are cached in `localStorage` for 24 hours to survive poor connectivity; clearing browser storage forces a refetch.
+- **Advanced logging** – Extend `ScorekeeperApp.createLogObject` or `recordSpecialEvent` to add more metadata (spirit scores, observer notes, field numbers). The backend will create matching columns automatically on first submit.
 
 ---
 
-## 11) Troubleshooting
+## Development & troubleshooting
 
-* **Submissions fail**: confirm `WEB_APP_URL` and that the deployment is the latest version.
-* **No new tab in Sheet**: verify `SHEET_ID` and script permissions.
-* **CORS/browser errors**: ensure you’re calling the Apps Script “/exec” URL, not “/dev”.
-
----
-
-## 12) Roadmap (non-binding)
-
-* Offline queue with automatic retry
-* Per-player statistics summary
-* CSV export in addition to Google Sheets
-* Admin lock and audit trail
-* Multi-game/tournament workflows
+- Serve locally with any static file server (`python -m http.server 8000`) and open `http://localhost:8000` on desktop or mobile.
+- DevTools → Application → Storage lets you inspect/clear `localStorage` keys (`scoreLogs`, `gameState`, timer state, roster cache).
+- **Roster dropdowns empty** – Verify `CONFIG.API_URL` is reachable and returns valid CSV/JSON; if the prior fetch failed, the UI falls back to cached rosters and shows a console warning.
+- **Google Sheets not updating** – Confirm `SUBMIT_URL` points to the `/exec` deployment, `function doPost.ts` has the correct `SHEET_ID`, and the deployment was refreshed after editing.
+- **Only CSV downloads** – Expected when `SUBMIT_URL` is blank; the toast explicitly states that only local export occurred.
+- **Timer refuses to start** – Active game stoppage or a reached score cap (15) blocks timer toggles and add-score buttons until resolved.
 
 ---
 
-## 13) Contributing
+## License
 
-Issues and pull requests are welcome. Please keep the UI concise and touch-friendly, and avoid adding heavy dependencies.
-
----
-
-## 14) License
-
-**CC0 1.0 Universal (Public Domain Dedication).**
-
-To the extent possible under law, the authors have dedicated this work to the public domain.
-You may copy, modify, distribute, and use the work, including for commercial purposes, without asking permission.
-
-A copy of the full text is available at: [https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/)
+**CC0 1.0 Universal (Public Domain Dedication)** – use, modify, and redistribute without restriction. Full text: [https://creativecommons.org/publicdomain/zero/1.0/](https://creativecommons.org/publicdomain/zero/1.0/)

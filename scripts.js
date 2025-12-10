@@ -1,14 +1,10 @@
-/**
- * Reload-Proof Scorekeeping Application
- * Enhanced with comprehensive state persistence
- */
 
 // =====================================================
 // CONSTANTS AND CONFIGURATION
 // =====================================================
 const CONFIG = {
-
-  API_URL: "URL_TO_PULL_DATA",
+  // API_URL has a demo link
+  API_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFk92HGZeA1axdOam7-jS1J-dmMBi2qhgHW4BuDEEPgt2FbiS2LUp2ZuoCd55mT2qyLR3qpomN9Xbo/pub?gid=0&single=true&output=csv",
   SUBMIT_URL: "URL_TO_POST_DATA",
   DEFAULT_TIMER_MINUTES: 100,
   LOADING_ANIMATION_INTERVAL: 500,

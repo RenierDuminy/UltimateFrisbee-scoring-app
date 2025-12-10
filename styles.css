@@ -179,7 +179,7 @@ th {
 #scoringTableBody tr td:nth-child(1),
 #scoringTableBody tr td:nth-child(4) {
   font-weight: 700;
-  font-size: calc(1em + 2pt);
+  font-size: calc(1em - 1pt);
 }
 
 
@@ -236,7 +236,7 @@ input[type="button"],
 
 input[type="button"]:hover,
 .main-button:hover {
-  background: #4f202f;
+  background: #4a6cff;
 }
 
 .main-button:disabled {
